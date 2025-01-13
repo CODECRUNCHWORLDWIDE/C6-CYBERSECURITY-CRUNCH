@@ -7,7 +7,7 @@
 
 ---
 
-Create at account .....
+Create an account .....
 
 ### **Commands: Terminal**
 ```bash
@@ -31,16 +31,3 @@ cat file_name.txt
 
 # Display disk space usage
 df -h
-```
-
----
-
-## Other Resources:
-- [Java Documentation](https://docs.oracle.com/javase/8/docs/)
-- [C Programming Reference](https://en.cppreference.com/w/c)
-- [Python Documentation](https://docs.python.org/3/)
-- [CSS Reference](https://developer.mozilla.org/en-US/docs/Web/CSS)
-- [JavaScript Guide](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
-- [HTML Documentation](https://developer.mozilla.org/en-US/docs/Web/HTML)
-- [React Documentation](https://reactjs.org/docs/getting-started.html)
-- [Linux Terminal Commands Cheat Sheet](https://www.guru99.com/linux-commands-cheat-sheet.html)
