@@ -2,99 +2,12 @@
 
 ## Topic: Programming Basics
 - **Week Dates:** January 6, 2025 - January 10, 2025
-- **Unit:** Week 1 - Overview of Programming Languages
-- **Link to Slides:** [Programming Basics Slides](https://example.com/slides)
+- **Unit:** Week 0 - Overview of C6 and Try Hack me
+- **Link to Slides:** [Programming Basics Slides](https://docs.google.com/presentation/d/1CV_feTceU6hOqWQ7kt1_1-fCR1wgHZ-I/edit?usp=sharing&ouid=107960321799476780456&rtpof=true&sd=true)
 
 ---
 
-### **Sample Code: Java**
-```java
-public class HelloWorld {
-    public static void main(String[] args) {
-        System.out.println("Hello, Java!");
-    }
-}
-```
-
----
-
-### **Sample Code: C**
-```c
-#include <stdio.h>
-
-int main() {
-    printf("Hello, C!\n");
-    return 0;
-}
-```
-
----
-
-### **Sample Code: Python**
-```python
-# Python Hello World
-print("Hello, Python!")
-```
-
----
-
-### **Sample Code: CSS**
-```css
-/* CSS Sample */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-h1 {
-    color: #007BFF;
-}
-```
-
----
-
-### **Sample Code: JavaScript**
-```javascript
-// JavaScript Hello World
-console.log("Hello, JavaScript!");
-```
-
----
-
-### **Sample Code: HTML**
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello HTML</title>
-</head>
-<body>
-    <h1>Hello, HTML!</h1>
-</body>
-</html>
-```
-
----
-
-### **Sample Code: React**
-```javascript
-import React from 'react';
-
-function App() {
-    return (
-        <div>
-            <h1>Hello, React!</h1>
-        </div>
-    );
-}
-
-export default App;
-```
-
----
+Create at account .....
 
 ### **Commands: Terminal**
 ```bash
