@@ -7,7 +7,7 @@
 
 ---
 
-Create an account .....
+Sample text for instructions
 
 ### **Commands: Terminal**
 ```bash
