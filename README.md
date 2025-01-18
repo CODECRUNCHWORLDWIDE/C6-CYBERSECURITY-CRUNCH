@@ -1,3 +1,3 @@
 # C6-CYBERSECURITY-CRUNCH
 
-[View the PDF](example.pdf)
+[View the PDF](https://github.com/CODE-CRUNCH-CLUB/C6-CYBERSECURITY-CRUNCH/blob/main/C6-SPRING2025/C6-RESOURCES/Week%200%20-%20C6%20_%20Cyber%20Crunch.pptx.pdf)
