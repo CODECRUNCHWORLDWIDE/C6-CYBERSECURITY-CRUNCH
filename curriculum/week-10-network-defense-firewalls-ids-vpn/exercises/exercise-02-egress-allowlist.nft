@@ -1,0 +1,150 @@
+#!/usr/sbin/nft -f
+#
+# Exercise 2 — Server-Style Egress Allowlist
+#
+# AUTHORIZED USE ONLY.  This ruleset is intended for a server you own
+# and administer.  See README banner.
+#
+# Goal: produce a ruleset for a small Linux server (web app, file server,
+# anything inbound-facing) that enforces:
+#   - default-deny on input (only a small set of inbound services)
+#   - default-deny on output (only a small allowlist of egress destinations)
+#   - default-deny on forward
+#
+# This is the highest-leverage single control against modern attacker
+# tradecraft: it neuters command-and-control and exfiltration channels
+# that an adversary needs after a successful exploit.
+#
+# TASK:
+#   1. Replace the placeholders marked TODO with the real values for
+#      your environment (your monitoring host, your package mirror,
+#      your DNS resolver, etc.).
+#   2. Apply with: sudo nft -f exercise-02-egress-allowlist.nft
+#   3. Verify the server still works: apt update, ntpdate, the
+#      monitoring agent can phone home, the web app responds.
+#   4. Verify the egress is actually constrained: ssh somewhere not
+#      in the allowlist; expect connection refused / timeout.  Watch
+#      the log:  sudo journalctl -kf | grep nft-drop-egress
+#
+# REFERENCE: nftables wiki — https://wiki.nftables.org/
+
+flush ruleset
+
+table inet filter {
+
+    # ---------------------------------------------------------------
+    # Allowlists.  These are the only addresses we egress to.
+    # ---------------------------------------------------------------
+
+    set allowed_dns {
+        type ipv4_addr
+        elements = {
+            10.0.0.53,        # TODO: your internal resolver
+            1.1.1.1,          # Cloudflare 1.1.1.1
+            9.9.9.9           # Quad9
+        }
+    }
+
+    set allowed_ntp {
+        type ipv4_addr
+        elements = {
+            162.159.200.1,    # Cloudflare time
+            162.159.200.123   # Cloudflare time
+            # TODO: add your local NTP server if you run one
+        }
+    }
+
+    set allowed_https {
+        type ipv4_addr
+        elements = {
+            # TODO: your package mirror (resolve once, pin here)
+            # TODO: your monitoring backend
+            # TODO: your CI / artefact server
+            # The list MUST be enumerated.  An "any" egress allowlist
+            # is not an allowlist; it is a holiday for attackers.
+            0.0.0.0/0   # PLACEHOLDER — replace with real addresses
+        }
+    }
+
+    set allowed_mirror {
+        type ipv4_addr
+        elements = {
+            # TODO: deb.debian.org / archive.ubuntu.com resolved once
+            91.189.91.81,     # archive.ubuntu.com (example, will drift)
+            185.125.190.36    # archive.ubuntu.com (example, will drift)
+        }
+    }
+
+    # ---------------------------------------------------------------
+    # Input — what the world is allowed to send us.
+    # ---------------------------------------------------------------
+
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        iif lo accept
+        ct state established,related accept
+        ct state invalid counter drop
+
+        # ICMP / ICMPv6: rate-limited.
+        icmp   type echo-request limit rate 5/second accept
+        icmpv6 type echo-request limit rate 5/second accept
+        icmpv6 type {
+            nd-router-advert,
+            nd-neighbor-solicit,
+            nd-neighbor-advert
+        } accept
+
+        # SSH from management only.
+        ip saddr 10.0.10.0/24 tcp dport 22 ct state new \
+            limit rate 5/minute accept
+
+        # The service this server provides — TODO: edit for your app.
+        tcp dport { 80, 443 } accept
+
+        limit rate 5/second log prefix "nft-drop-in: " level info
+    }
+
+    # ---------------------------------------------------------------
+    # Forward — server is not a router.
+    # ---------------------------------------------------------------
+
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+    }
+
+    # ---------------------------------------------------------------
+    # Output — what *we* are allowed to send out.  Default-deny.
+    # ---------------------------------------------------------------
+
+    chain output {
+        type filter hook output priority filter; policy drop;
+
+        # Loopback and replies always allowed.
+        oif lo accept
+        ct state established,related accept
+
+        # DNS — UDP and TCP — to the approved resolvers only.
+        ip daddr @allowed_dns udp dport 53 accept
+        ip daddr @allowed_dns tcp dport 53 accept
+
+        # NTP — UDP/123 to the approved time servers only.
+        ip daddr @allowed_ntp udp dport 123 accept
+
+        # APT / DNF mirror over HTTP and HTTPS — TODO: edit for your distro.
+        ip daddr @allowed_mirror tcp dport { 80, 443 } accept
+
+        # HTTPS to a small allowlist of business-justified destinations.
+        ip daddr @allowed_https tcp dport 443 accept
+
+        # ICMP outbound for diagnostics — rate-limited.
+        icmp   type echo-request limit rate 5/second accept
+        icmpv6 type echo-request limit rate 5/second accept
+
+        # Everything else: log and drop.  Read these logs weekly; every
+        # entry is either a destination that belongs in the allowlist
+        # or a sign that something on this host is talking to a place
+        # it should not.
+        limit rate 5/second log prefix "nft-drop-egress: " level warn
+    }
+}

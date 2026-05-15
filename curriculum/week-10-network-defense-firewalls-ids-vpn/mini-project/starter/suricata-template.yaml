@@ -1,0 +1,123 @@
+# suricata.yaml — TEMPLATE FRAGMENT
+#
+# AUTHORIZED USE ONLY.  Deploy Suricata only on a network you own and
+# administer or for which you hold written authorisation.
+#
+# This file is a *fragment*.  Merge it into your installed
+# /etc/suricata/suricata.yaml; do not replace the whole shipped file.
+#
+# Reference: https://docs.suricata.io/
+
+vars:
+  address-groups:
+    HOME_NET: "[10.0.10.0/24,10.0.20.0/24,10.0.30.0/24,10.0.40.0/24,10.10.0.0/24]"
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS:  "$HOME_NET"
+    DNS_SERVERS:  "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    DC_SERVERS:     "$HOME_NET"
+    DNP3_SERVER:    "$HOME_NET"
+    DNP3_CLIENT:    "$HOME_NET"
+    MODBUS_CLIENT:  "$HOME_NET"
+    MODBUS_SERVER:  "$HOME_NET"
+    ENIP_CLIENT:    "$HOME_NET"
+    ENIP_SERVER:    "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS:     "80,8080,8000,8443"
+    SHELLCODE_PORTS: "!80"
+    SSH_PORTS:       22
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS:       21
+
+# TODO: edit this interface name to whichever NIC sees the traffic.
+af-packet:
+  - interface: eth0
+    threads: 2
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+    tpacket-v3: yes
+    ring-size: 200000
+    block-size: 32768
+    checksum-checks: kernel
+
+outputs:
+  - fast:
+      enabled: no
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+      community-id: yes
+      community-id-seed: 0
+      types:
+        - alert:
+            metadata: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - flow
+
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - suricata.rules
+  - /etc/suricata/rules/local.rules
+
+threshold-file: /etc/suricata/threshold.config
+
+# --------------------------------------------------------------------
+# Companion files (paste into their own files at install time)
+# --------------------------------------------------------------------
+
+# /etc/suricata/disable.conf
+# --- begin ---
+# group:emerging-chat.rules
+# group:emerging-games.rules
+# group:emerging-inappropriate.rules
+# # TODO: add more categories that do not match your environment
+# --- end ---
+
+# /etc/suricata/threshold.config
+# --- begin ---
+# # TODO: after running suricata for an hour, run:
+# #   sudo jq -r 'select(.event_type=="alert") | .alert.signature_id' \
+# #     /var/log/suricata/eve.json | sort | uniq -c | sort -rn | head -10
+# # and add suppress/event_filter lines for the top noisy SIDs.
+# # Example:
+# # suppress     gen_id 1, sig_id 2027865
+# # event_filter gen_id 1, sig_id 2010935, type both, track by_src, count 1, seconds 3600
+# --- end ---
+
+# /etc/suricata/rules/local.rules
+# --- begin ---
+# # Local rule 1 — external attempt to reach an internal /admin path.
+# alert http $EXTERNAL_NET any -> $HTTP_SERVERS any ( \
+#     msg:"LOCAL External attempt to reach /admin"; \
+#     flow:to_server,established; \
+#     http.uri; content:"/admin"; startswith; \
+#     classtype:policy-violation; \
+#     sid:1000001; \
+#     rev:1; \
+#     metadata:mitre_technique_id T1190; \
+# )
+#
+# # Local rule 2 — SSH from outside HOME_NET.
+# alert tcp $EXTERNAL_NET any -> $HOME_NET 22 ( \
+#     msg:"LOCAL SSH connection attempt from outside HOME_NET"; \
+#     flow:to_server,established; \
+#     classtype:network-scan; \
+#     sid:1000002; \
+#     rev:1; \
+#     metadata:mitre_technique_id T1021; \
+# )
+#
+# # Local rule 3 — TODO add one matching your highest-value flow.
+# --- end ---

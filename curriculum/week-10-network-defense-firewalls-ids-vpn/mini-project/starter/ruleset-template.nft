@@ -1,0 +1,172 @@
+#!/usr/sbin/nft -f
+#
+# Gateway nftables ruleset — TEMPLATE.
+#
+# AUTHORIZED USE ONLY.  This ruleset is intended for a gateway on a
+# network the operator owns or is authorised to administer.
+#
+# Network:  TODO — name of the network
+# Host:     TODO — hostname of the gateway
+# Operator: TODO — your name or handle
+# Revised:  TODO — ISO 8601 date
+#
+# Reference: nftables wiki — https://wiki.nftables.org/
+
+flush ruleset
+
+table inet filter {
+
+    # ---------------------------------------------------------------
+    # Named sets
+    # ---------------------------------------------------------------
+
+    set mgmt_v4 {
+        type ipv4_addr
+        elements = {
+            10.0.10.0/24,    # trusted segment
+            10.10.0.0/24     # vpn overlay
+        }
+    }
+
+    set scanners {
+        type ipv4_addr
+        flags dynamic, timeout
+        timeout 1h
+    }
+
+    set allowed_dns {
+        type ipv4_addr
+        elements = { 1.1.1.1, 9.9.9.9 }
+    }
+
+    set allowed_ntp {
+        type ipv4_addr
+        elements = { 162.159.200.1, 162.159.200.123 }
+    }
+
+    # ---------------------------------------------------------------
+    # Input — packets destined for the gateway itself
+    # ---------------------------------------------------------------
+
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        iif lo accept
+        ct state established,related accept
+        ct state invalid counter drop
+        ip saddr @scanners counter drop
+
+        # ICMP
+        icmp   type echo-request limit rate 5/second accept
+        icmpv6 type echo-request limit rate 5/second accept
+        icmpv6 type {
+            nd-router-advert,
+            nd-neighbor-solicit,
+            nd-neighbor-advert
+        } accept
+
+        # DHCP server on the LAN-facing interfaces.
+        iif "eth1.10" udp sport 68 udp dport 67 accept
+        iif "eth1.20" udp sport 68 udp dport 67 accept
+        iif "eth1.30" udp sport 68 udp dport 67 accept
+        iif "eth1.40" udp sport 68 udp dport 67 accept
+
+        # DNS resolver if you run one locally — TODO: enable if applicable.
+        # ip saddr @mgmt_v4 udp dport 53 accept
+        # ip saddr @mgmt_v4 tcp dport 53 accept
+
+        # SSH from management only — TODO: replace mgmt_v4 with your real subnet.
+        ip saddr @mgmt_v4 tcp dport 22 ct state new limit rate 5/minute accept
+
+        # WireGuard listener on UDP/51820.
+        udp dport 51820 accept
+
+        # Log the rest sparingly.
+        limit rate 5/second log prefix "nft-drop-in: " level info
+    }
+
+    # ---------------------------------------------------------------
+    # Forward — packets routed between interfaces
+    # ---------------------------------------------------------------
+
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+
+        ct state established,related accept
+        ct state invalid counter drop
+
+        # Trusted may reach anywhere.
+        iifname "eth1.10" accept
+
+        # VPN may reach trusted via the jump host only (10.0.10.5).
+        iifname wg0 oifname "eth1.10" ip daddr 10.0.10.5 tcp dport 22 accept
+        iifname wg0 oifname "eth1.10" counter drop
+
+        # DMZ may reach the internet but not other LAN segments.
+        iifname "eth1.20" oifname eth0 accept
+        iifname "eth1.20" oifname "eth1.*" counter drop
+
+        # Guest may reach the internet only.
+        iifname "eth1.30" oifname eth0 accept
+        iifname "eth1.30" oifname "eth1.*" counter drop
+
+        # IoT may reach the internet only (and the printer ports on
+        # the trusted segment).  TODO: tighten.
+        iifname "eth1.40" oifname eth0 accept
+        iifname "eth1.40" oifname "eth1.10" tcp dport { 631, 9100 } accept
+        iifname "eth1.40" oifname "eth1.*" counter drop
+
+        # Everything else: log + drop.
+        limit rate 5/second log prefix "nft-drop-fwd: " level info
+    }
+
+    # ---------------------------------------------------------------
+    # Output — packets the gateway originates
+    # ---------------------------------------------------------------
+
+    chain output {
+        type filter hook output priority filter; policy drop;
+
+        oif lo accept
+        ct state established,related accept
+
+        # DNS to upstream resolvers.
+        ip daddr @allowed_dns udp dport 53 accept
+        ip daddr @allowed_dns tcp dport 53 accept
+
+        # NTP.
+        ip daddr @allowed_ntp udp dport 123 accept
+
+        # ICMP diagnostics, rate-limited.
+        icmp   type echo-request limit rate 5/second accept
+        icmpv6 type echo-request limit rate 5/second accept
+
+        # HTTPS to update / monitor destinations — TODO: enumerate.
+        # ip daddr @allowed_https tcp dport 443 accept
+
+        # WireGuard server itself sends out of eth0.
+        oif eth0 udp sport 51820 accept
+
+        limit rate 5/second log prefix "nft-drop-egress: " level warn
+    }
+}
+
+# -------------------------------------------------------------------
+# NAT
+# -------------------------------------------------------------------
+
+table inet nat {
+    chain prerouting {
+        type nat hook prerouting priority dstnat;
+        # TODO: add port-forwards if needed; the canonical DMZ pattern:
+        # iif eth0 tcp dport 443 dnat to 10.0.20.10:443
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat;
+        # Masquerade LAN egress.
+        oifname eth0 masquerade
+        # Masquerade VPN egress (so LAN hosts see traffic from gateway).
+        iifname wg0 oifname "eth1.10" masquerade
+    }
+}

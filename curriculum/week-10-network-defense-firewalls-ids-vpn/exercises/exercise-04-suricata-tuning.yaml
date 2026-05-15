@@ -1,0 +1,243 @@
+# Exercise 4 — Suricata Tuning Configuration Fragment
+#
+# AUTHORIZED USE ONLY.  Deploy Suricata only on a network you own and
+# administer or for which you hold written authorisation.  Suricata
+# reads every packet on its monitoring interface; treating that interface
+# as if it were off-the-shelf hardware on a network you do not own is
+# the same category of mistake as running tcpdump on a coffee-shop
+# Wi-Fi uplink.  Re-read the week README banner.
+#
+# Goal: produce a small but realistic set of tuning configuration that
+# turns the out-of-the-box Suricata + ET Open install into something
+# whose alert stream is useful rather than overwhelming.
+#
+# This file ships THREE deliverables in YAML-or-Suricata-config form:
+#
+#   1. A suricata.yaml fragment with sensible defaults for a small
+#      lab deployment (vars, af-packet, eve.json outputs).
+#
+#   2. A disable.conf block listing categories to drop from the merged
+#      ruleset.  suricata-update reads this from /etc/suricata/disable.conf.
+#
+#   3. A threshold.config block with suppress + event_filter rules for
+#      common noisy signatures.  Suricata reads this from
+#      /etc/suricata/threshold.config (or as configured in suricata.yaml).
+#
+# TASK:
+#   1. Open /etc/suricata/suricata.yaml and apply the changes in the
+#      'SURICATA.YAML FRAGMENT' section below.
+#   2. Create /etc/suricata/disable.conf and paste the 'DISABLE.CONF'
+#      block.
+#   3. Create /etc/suricata/threshold.config and paste the
+#      'THRESHOLD.CONFIG' block, after editing the TODO placeholders
+#      for your environment.
+#   4. Run:  sudo suricata-update
+#           sudo systemctl restart suricata
+#   5. Wait an hour; query eve.json for the top 10 signatures by
+#      frequency; if any of them are still noise, add them to
+#      threshold.config and repeat.
+#
+# REFERENCE:
+#   Suricata documentation — https://docs.suricata.io/
+#   ET Open ruleset       — https://rules.emergingthreats.net/open/
+#   suricata-update       — https://suricata-update.readthedocs.io/
+
+# =====================================================================
+# SURICATA.YAML FRAGMENT
+# =====================================================================
+# Paste / merge the following keys into /etc/suricata/suricata.yaml.
+# DO NOT replace the whole file; the shipped default has many more
+# fields than shown here.  Edit only the keys named below.
+
+vars:
+  address-groups:
+    # HOME_NET is "the inside of your network".  Edit to match the
+    # subnets you actually use.
+    HOME_NET: "[10.0.10.0/24,10.0.20.0/24,10.0.30.0/24,10.10.0.0/24]"
+    # EXTERNAL_NET is everything that is not HOME_NET.
+    EXTERNAL_NET: "!$HOME_NET"
+    HTTP_SERVERS: "$HOME_NET"
+    SMTP_SERVERS: "$HOME_NET"
+    SQL_SERVERS:  "$HOME_NET"
+    DNS_SERVERS:  "$HOME_NET"
+    TELNET_SERVERS: "$HOME_NET"
+    AIM_SERVERS:    "$EXTERNAL_NET"
+    DC_SERVERS:     "$HOME_NET"
+    DNP3_SERVER:    "$HOME_NET"
+    DNP3_CLIENT:    "$HOME_NET"
+    MODBUS_CLIENT:  "$HOME_NET"
+    MODBUS_SERVER:  "$HOME_NET"
+    ENIP_CLIENT:    "$HOME_NET"
+    ENIP_SERVER:    "$HOME_NET"
+
+  port-groups:
+    HTTP_PORTS:     "80,8080,8000,8443"
+    SHELLCODE_PORTS: "!80"
+    ORACLE_PORTS:    1521
+    SSH_PORTS:       22
+    DNP3_PORTS:      20000
+    MODBUS_PORTS:    502
+    FILE_DATA_PORTS: "[$HTTP_PORTS,110,143]"
+    FTP_PORTS:       21
+    GENEVE_PORTS:    6081
+    VXLAN_PORTS:     4789
+    TEREDO_PORTS:    3544
+
+# Capture configuration.  EDIT 'interface' to your monitoring NIC.
+af-packet:
+  - interface: eth1                  # TODO: your monitoring interface
+    threads: 2                       # set to number of physical cores
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+    use-mmap: yes
+    tpacket-v3: yes
+    ring-size: 200000
+    block-size: 32768
+    checksum-checks: kernel
+
+# Outputs.  Disable the per-protocol legacy logs; use eve.json alone.
+outputs:
+  - fast:
+      enabled: no
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+      community-id: yes
+      community-id-seed: 0
+      types:
+        - alert:
+            metadata: yes
+            tagged-packets: yes
+        - http:
+            extended: yes
+        - dns:
+            query: yes
+            answer: yes
+        - tls:
+            extended: yes
+        - flow
+        - ssh
+        - smb
+        - files:
+            force-magic: no
+        - stats:
+            totals: yes
+            threads: no
+            deltas: no
+
+# Rule paths.  suricata-update writes the merged file to suricata.rules.
+default-rule-path: /var/lib/suricata/rules
+rule-files:
+  - suricata.rules
+  - /etc/suricata/rules/local.rules
+
+# Reference threshold.config (the one we ship below).
+threshold-file: /etc/suricata/threshold.config
+
+# =====================================================================
+# DISABLE.CONF
+# =====================================================================
+# Paste into /etc/suricata/disable.conf.  Re-run `suricata-update`
+# after editing.  Each line is either a 'group:' (disables an entire
+# rules file) or a 'sid:' (disables one rule).
+#
+# The lines below disable categories that produce more noise than
+# signal on a typical small lab network.  EDIT to your threat model.
+#
+#   --- begin disable.conf ---
+#   group:emerging-chat.rules
+#   group:emerging-games.rules
+#   group:emerging-inappropriate.rules
+#   group:emerging-policy.rules
+#   group:emerging-info.rules
+#   # TODO: enable emerging-policy if you want to know when somebody
+#   # on your network downloads a torrent.  Disable if you do not care.
+#   --- end disable.conf ---
+
+# =====================================================================
+# THRESHOLD.CONFIG
+# =====================================================================
+# Paste into /etc/suricata/threshold.config.  Edit the TODO blocks for
+# your environment.
+#
+# The format:
+#   suppress     gen_id <g>, sig_id <s> [, track by_src|by_dst, ip <addr>]
+#   event_filter gen_id <g>, sig_id <s>, type <limit|threshold|both>, \
+#                track by_src|by_dst, count <n>, seconds <secs>
+#
+#   --- begin threshold.config ---
+#
+#   # Suppress: stop alerting entirely on this sid.
+#
+#   # GPL Snort sid 2100498 — "GPL ATTACK_RESPONSE id check returned root".
+#   # Fires on the literal string "uid=0(root)" in HTTP response.  Very
+#   # noisy if you happen to have docs that contain that string.
+#   # Suppress only if your environment legitimately produces the pattern.
+#   # suppress gen_id 1, sig_id 2100498
+#
+#   # ET INFO "Possible MITM" rules — TODO: review your sids.
+#   suppress gen_id 1, sig_id 2027865
+#   suppress gen_id 1, sig_id 2025701
+#
+#   # Suppress when the source is our resolver (the resolver itself
+#   # generates DNS-shaped traffic that some signatures misclassify).
+#   suppress gen_id 1, sig_id 2034333, track by_src, ip 10.0.0.53
+#
+#   # Event filters: rate-limit the alert frequency.
+#
+#   # ET SCAN signatures — at most one alert per minute per source.
+#   event_filter gen_id 1, sig_id 2010935, type both, track by_src, count 1, seconds 60
+#   event_filter gen_id 1, sig_id 2014907, type both, track by_src, count 1, seconds 60
+#
+#   # TODO: after you have run Suricata for a week, query eve.json:
+#   #   sudo tail -n 100000 /var/log/suricata/eve.json |
+#   #       jq -r 'select(.event_type=="alert") | .alert.signature_id' |
+#   #       sort | uniq -c | sort -rn | head -10
+#   # The sids that show up at the top are your tuning targets.  Add
+#   # them to suppress / event_filter as appropriate.
+#
+#   --- end threshold.config ---
+
+# =====================================================================
+# A LOCAL.RULES STARTER
+# =====================================================================
+# Paste into /etc/suricata/rules/local.rules.  Custom rules.  Use sids
+# in the 1 000 000 — 1 999 999 range to avoid colliding with ET Open
+# (2 000 000+) or Snort VRT (under 1 000 000).
+#
+#   --- begin local.rules ---
+#
+#   # Alert: external attempt to reach /admin on any HTTP_SERVERS.
+#   alert http $EXTERNAL_NET any -> $HTTP_SERVERS any ( \
+#       msg:"LOCAL External attempt to reach /admin"; \
+#       flow:to_server,established; \
+#       http.uri; content:"/admin"; startswith; \
+#       classtype:policy-violation; \
+#       sid:1000001; \
+#       rev:1; \
+#       metadata:mitre_technique_id T1190; \
+#   )
+#
+#   # Alert: SSH from outside HOME_NET (we do not expect any).
+#   alert tcp $EXTERNAL_NET any -> $HOME_NET 22 ( \
+#       msg:"LOCAL SSH connection attempt from outside HOME_NET"; \
+#       flow:to_server,established; \
+#       classtype:network-scan; \
+#       sid:1000002; \
+#       rev:1; \
+#       metadata:mitre_technique_id T1021; \
+#   )
+#
+#   # Alert: DNS query for any suspicious-tld domain.  Edit the TLD
+#   # list for your environment.
+#   alert dns $HOME_NET any -> any 53 ( \
+#       msg:"LOCAL DNS query for suspicious TLD"; \
+#       dns.query; pcre:"/\.(xyz|top|click|country|click)$/i"; \
+#       classtype:policy-violation; \
+#       sid:1000003; \
+#       rev:1; \
+#   )
+#
+#   --- end local.rules ---

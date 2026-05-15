@@ -1,0 +1,117 @@
+#!/usr/sbin/nft -f
+#
+# Exercise 1 — Workstation Host Firewall
+#
+# AUTHORIZED USE ONLY.  This ruleset is intended for a host you own
+# and administer, or one for which you hold written authorisation
+# from the owner.  Re-read the README banner before applying.
+#
+# Goal: produce a default-deny ruleset for a Linux workstation that:
+#   - permits inbound replies to outbound conversations
+#   - permits inbound SSH from a single management subnet
+#   - permits ICMP echo (ping) at a sane rate
+#   - permits IPv6 neighbour discovery
+#   - logs and drops everything else
+#   - blocks repeat scanners by automatically populating a dynamic set
+#
+# TASK:
+#   1. Fill in the placeholders marked TODO.
+#   2. Apply with: sudo nft -f exercise-01-host-firewall.nft
+#   3. Verify with: sudo nft list ruleset
+#   4. Test from another host: should SSH from the management subnet,
+#      should not SSH from anywhere else, should ping at low rate, should
+#      not ping at high rate.
+#   5. Before any of step 4: schedule a revert with `at` so you do not
+#      lock yourself out (see lecture 1 section 8).
+#
+# REFERENCE: nftables wiki — https://wiki.nftables.org/
+
+flush ruleset
+
+table inet filter {
+
+    # Dynamic set of recent scanners.  Anyone we have observed sending
+    # too many new connections too quickly lands here for an hour.
+    set scanners {
+        type ipv4_addr
+        flags dynamic, timeout
+        timeout 1h
+    }
+
+    # Static set: trusted management addresses (your VPN subnet, your
+    # office subnet, your home subnet — whatever is appropriate for
+    # your environment).  TODO: replace with your real values.
+    set mgmt_v4 {
+        type ipv4_addr
+        elements = {
+            10.0.10.0/24,
+            # TODO: add your management /24, /32, or whatever applies.
+        }
+    }
+
+    chain input {
+        type filter hook input priority filter; policy drop;
+
+        # 1. Loopback is trusted.
+        iif lo accept
+
+        # 2. Drop traffic claiming to come from loopback on a non-lo iface.
+        iif != lo ip saddr 127.0.0.0/8 counter drop
+        iif != lo ip6 saddr ::1/128 counter drop
+
+        # 3. Already-known scanners: drop on sight.
+        ip saddr @scanners counter drop
+
+        # 4. Replies to outbound conversations.
+        ct state established,related accept
+
+        # 5. Drop malformed packets cheaply.
+        ct state invalid counter drop
+
+        # 6. ICMP: rate-limited echo + the IPv6 control plane.
+        icmp type echo-request limit rate 5/second accept
+        icmpv6 type echo-request limit rate 5/second accept
+        icmpv6 type {
+            nd-router-advert,
+            nd-neighbor-solicit,
+            nd-neighbor-advert,
+            mld-listener-query,
+            mld-listener-report
+        } accept
+
+        # 7. SSH from management only, with per-source rate-limit and
+        #    auto-add-to-scanners on overflow.
+        ip saddr @mgmt_v4 tcp dport 22 ct state new \
+            limit rate 5/minute accept
+        tcp dport 22 ct state new \
+            add @scanners { ip saddr timeout 1h } \
+            counter drop
+
+        # 8. TODO (your homework week 1 of the course): decide whether
+        #    this workstation needs to accept any other inbound port.
+        #    For most workstations the answer is no.  If yes, add the
+        #    rule here in the form:
+        #
+        #      tcp dport <port> accept
+        #
+        #    and document the rule in your runbook.
+
+        # 9. Log a sample of dropped packets (rate-limited so the log
+        #    does not fill the disk during a scan storm).
+        limit rate 5/second log prefix "nft-drop-in: " level info
+
+        # Falls through to policy drop.
+    }
+
+    chain forward {
+        # Workstation: not a router.
+        type filter hook forward priority filter; policy drop;
+    }
+
+    chain output {
+        # Workstation pattern: default-accept on output.  For a server
+        # you would flip this to drop and add an egress allowlist; see
+        # exercise-02 for that pattern.
+        type filter hook output priority filter; policy accept;
+    }
+}
