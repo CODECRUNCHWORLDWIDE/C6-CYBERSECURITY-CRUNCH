@@ -1,0 +1,126 @@
+{
+  "_comment_authorized_use_only": "AUTHORIZED USE ONLY. This is a teaching artefact. Do NOT attach this policy to any real principal in a real account. The policy contains a deliberately broad permission grant for instructional purposes; read the SOLUTIONS.md walkthrough to understand what is wrong with it, why a scanner would flag it, and how to rewrite it correctly.",
+
+  "_comment_exercise": "Exercise 1 — Policy Anatomy. Read this policy top-to-bottom. Identify, in writing in your notes: (1) the four required JSON keys present; (2) the optional keys present; (3) every action and every resource the policy grants; (4) every condition that gates the grant; (5) at least three things wrong with the policy from a least-privilege standpoint; (6) the specific Prowler check IDs (or Checkov check IDs) you would expect to fire against a principal carrying this policy. The SOLUTIONS.md walkthrough covers all six.",
+
+  "_comment_attach_target_hint": "If you were to attach this hypothetically, the policy is structured as an IAM identity-based policy (no Principal field) intended for an IAM role used by a CI build pipeline. The role would assume a deployer identity to push container images to ECR and write build artefacts to S3. That is the stated purpose; whether the policy actually scopes to that purpose is what you are evaluating.",
+
+  "Version": "2012-10-17",
+  "Id": "c6-week11-exercise-01-anatomy-policy",
+  "Statement": [
+    {
+      "Sid": "BuildPipelineFullAccess",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*",
+        "ecr:*",
+        "ec2:*",
+        "iam:PassRole",
+        "iam:GetRole",
+        "iam:ListRoles",
+        "logs:*",
+        "cloudwatch:*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "DeploymentArtefactReadWrite",
+      "Effect": "Allow",
+      "Action": [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:DeleteObject",
+        "s3:ListBucket"
+      ],
+      "Resource": [
+        "arn:aws:s3:::c6-week11-build-artefacts",
+        "arn:aws:s3:::c6-week11-build-artefacts/*",
+        "arn:aws:s3:::c6-week11-container-images",
+        "arn:aws:s3:::c6-week11-container-images/*"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "true"
+        },
+        "StringEquals": {
+          "aws:PrincipalTag/Pipeline": "ci-deployer"
+        }
+      }
+    },
+    {
+      "Sid": "TimeBoundProductionWriteWindow",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchGetImage",
+        "ecr:PutImage",
+        "ecr:InitiateLayerUpload",
+        "ecr:UploadLayerPart",
+        "ecr:CompleteLayerUpload",
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "arn:aws:ecr:us-east-1:123456789012:repository/c6-week11-*",
+      "Condition": {
+        "DateGreaterThan": {
+          "aws:CurrentTime": "2026-05-14T08:00:00Z"
+        },
+        "DateLessThan": {
+          "aws:CurrentTime": "2026-05-14T18:00:00Z"
+        }
+      }
+    },
+    {
+      "Sid": "DenyKMSWriteEverExceptDuringRotation",
+      "Effect": "Deny",
+      "Action": [
+        "kms:Decrypt",
+        "kms:Encrypt",
+        "kms:GenerateDataKey",
+        "kms:ScheduleKeyDeletion",
+        "kms:DisableKey",
+        "kms:DisableKeyRotation",
+        "kms:CreateAlias",
+        "kms:DeleteAlias"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "aws:MultiFactorAuthPresent": "false"
+        }
+      }
+    },
+    {
+      "Sid": "AllowDescribeAcrossAccount",
+      "Effect": "Allow",
+      "NotAction": [
+        "iam:*",
+        "organizations:*",
+        "kms:Delete*",
+        "kms:Schedule*",
+        "kms:Disable*"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEqualsIfExists": {
+          "aws:RequestedRegion": ["us-east-1", "us-west-2"]
+        }
+      }
+    },
+    {
+      "Sid": "AssumeDeployerAcrossAccount",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Resource": [
+        "arn:aws:iam::987654321098:role/c6-week11-staging-deployer",
+        "arn:aws:iam::987654321099:role/c6-week11-prod-deployer"
+      ],
+      "Condition": {
+        "Bool": {
+          "aws:MultiFactorAuthPresent": "true"
+        },
+        "StringEquals": {
+          "aws:PrincipalTag/Pipeline": "ci-deployer"
+        }
+      }
+    }
+  ]
+}

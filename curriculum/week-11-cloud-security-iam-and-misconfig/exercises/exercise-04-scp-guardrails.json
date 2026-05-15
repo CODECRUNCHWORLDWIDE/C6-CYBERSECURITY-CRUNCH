@@ -1,0 +1,159 @@
+{
+  "_comment_authorized_use_only": "AUTHORIZED USE ONLY. Attach Service Control Policies only to an AWS Organization you personally own and administer, or for which you hold written authorisation from the organisation's master-account owner. SCPs apply to every account in the targeted OU and can cause widespread, sudden access denials. Practice in a sandbox OU before attaching to any account that runs real workloads.",
+
+  "_comment_exercise": "Exercise 4 — Three SCPs for an OU. Three SCP documents are provided in this file, separated as JSON-object members under the `scps` key. Each is the kind of guardrail every serious AWS Organisation eventually deploys. Your task: read each, predict what action would and would not be permitted under it, identify the one most-likely to lock you out of the account if you applied it without thinking, and write (in your notes) the order in which you would deploy them to a fresh OU and why. SOLUTIONS.md walks through all three.",
+
+  "scps": {
+    "scp_01_region_lockdown": {
+      "_comment": "Lock the OU to two regions. Global services (IAM, Organizations, STS, CloudFront, Route 53, WAF, Support) are excluded from the deny via NotAction because they are region-less and would otherwise be unreachable.",
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "DenyAllOutsideApprovedRegions",
+          "Effect": "Deny",
+          "NotAction": [
+            "iam:*",
+            "organizations:*",
+            "sts:*",
+            "support:*",
+            "cloudfront:*",
+            "route53:*",
+            "route53domains:*",
+            "waf:*",
+            "wafv2:*",
+            "waf-regional:*",
+            "shield:*",
+            "globalaccelerator:*",
+            "trustedadvisor:*",
+            "budgets:*",
+            "ce:*",
+            "cur:*",
+            "aws-marketplace:*",
+            "savingsplans:*",
+            "tag:*",
+            "tagging:*",
+            "health:*"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringNotEquals": {
+              "aws:RequestedRegion": [
+                "us-east-1",
+                "us-west-2"
+              ]
+            }
+          }
+        }
+      ]
+    },
+
+    "scp_02_cloudtrail_protection": {
+      "_comment": "Prevent any principal in the OU (including administrators) from disabling, deleting, or tampering with CloudTrail. The break-glass identity in the management account is the only path to legitimate CloudTrail changes. This SCP is the single highest-value guardrail in real AWS organisations.",
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "DenyCloudTrailTampering",
+          "Effect": "Deny",
+          "Action": [
+            "cloudtrail:StopLogging",
+            "cloudtrail:DeleteTrail",
+            "cloudtrail:UpdateTrail",
+            "cloudtrail:PutEventSelectors",
+            "cloudtrail:PutInsightSelectors",
+            "cloudtrail:RemoveTags"
+          ],
+          "Resource": "arn:aws:cloudtrail:*:*:trail/*"
+        },
+        {
+          "Sid": "DenyConfigTampering",
+          "Effect": "Deny",
+          "Action": [
+            "config:DeleteConfigRule",
+            "config:DeleteConfigurationRecorder",
+            "config:DeleteDeliveryChannel",
+            "config:StopConfigurationRecorder"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "DenyGuardDutyTampering",
+          "Effect": "Deny",
+          "Action": [
+            "guardduty:DeleteDetector",
+            "guardduty:DisassociateMembers",
+            "guardduty:StopMonitoringMembers",
+            "guardduty:UpdateDetector"
+          ],
+          "Resource": "*"
+        }
+      ]
+    },
+
+    "scp_03_public_s3_prevention": {
+      "_comment": "Prevent any principal in the OU from disabling the S3 BlockPublicAccess settings on any bucket. Combined with an Organisation-wide BlockPublicAccess account-level setting, this SCP guarantees that no bucket in the OU can be made public regardless of what its bucket policy says. Also denies creation of IAM users (the OU is assumed to use IAM Identity Center for human access).",
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "DenyDisablingS3BlockPublicAccess",
+          "Effect": "Deny",
+          "Action": [
+            "s3:PutAccountPublicAccessBlock"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "Bool": {
+              "s3:PublicAccessBlockConfiguration.RestrictPublicBuckets": "false"
+            }
+          }
+        },
+        {
+          "Sid": "DenyPublicACLsOnBuckets",
+          "Effect": "Deny",
+          "Action": [
+            "s3:PutBucketAcl"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEqualsIfExists": {
+              "s3:x-amz-acl": [
+                "public-read",
+                "public-read-write",
+                "authenticated-read"
+              ]
+            }
+          }
+        },
+        {
+          "Sid": "DenyPublicACLsOnObjects",
+          "Effect": "Deny",
+          "Action": [
+            "s3:PutObjectAcl",
+            "s3:PutObject"
+          ],
+          "Resource": "*",
+          "Condition": {
+            "StringEqualsIfExists": {
+              "s3:x-amz-acl": [
+                "public-read",
+                "public-read-write",
+                "authenticated-read"
+              ]
+            }
+          }
+        },
+        {
+          "Sid": "DenyIAMUserCreation",
+          "Effect": "Deny",
+          "Action": [
+            "iam:CreateUser",
+            "iam:CreateAccessKey",
+            "iam:CreateLoginProfile",
+            "iam:UpdateLoginProfile",
+            "iam:CreateServiceSpecificCredential"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }
+  }
+}

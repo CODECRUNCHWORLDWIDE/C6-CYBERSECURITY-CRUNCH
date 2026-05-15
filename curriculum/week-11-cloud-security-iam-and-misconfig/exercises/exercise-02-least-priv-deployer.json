@@ -1,0 +1,154 @@
+{
+  "_comment_authorized_use_only": "AUTHORIZED USE ONLY. This is a teaching artefact intended for a test AWS account you personally own. Do not paste into a real production account without reading the SOLUTIONS.md walkthrough and adapting the ARNs, conditions, and tag keys to your environment.",
+
+  "_comment_exercise": "Exercise 2 — Author a Least-Privilege Policy. Starting from the requirements stated below, this file is the CANDIDATE answer (your draft after working through the design). SOLUTIONS.md walks through how to arrive here from a blank document, the alternatives considered, and the trade-offs each alternative would have made. Compare your own draft to this one; differences are not necessarily wrong, but every difference should have a reason.",
+
+  "_requirements": [
+    "The role this policy attaches to is the CI build robot for the c6-week11-app codebase.",
+    "The robot must be able to pull source from CodeCommit, build images, push to a specific ECR repository, write build logs to a specific CloudWatch log group, and read deployment configuration from a single SSM parameter prefix.",
+    "The robot runs in us-east-1 only. Any other region is a misconfiguration.",
+    "The robot must use TLS for every call (aws:SecureTransport must be true).",
+    "The robot must NOT be able to: modify IAM, modify Organizations, modify CloudTrail, create or destroy S3 buckets at the account level, decrypt KMS keys other than the one designated for the application, or call any action without a TLS-terminated session.",
+    "The robot's session is short-lived (one hour) and acquired via OIDC federation from the GitHub Actions runner the repository ships with.",
+    "The account is 123456789012; the ECR repository is c6-week11-app; the log group is /aws/codebuild/c6-week11-app; the SSM parameter prefix is /c6-week11/app/; the KMS key is the one whose alias is alias/c6-week11-app."
+  ],
+
+  "Version": "2012-10-17",
+  "Id": "c6-week11-exercise-02-least-priv-deployer",
+  "Statement": [
+    {
+      "Sid": "RequireTLS",
+      "Effect": "Deny",
+      "Action": "*",
+      "Resource": "*",
+      "Condition": {
+        "Bool": {
+          "aws:SecureTransport": "false"
+        }
+      }
+    },
+    {
+      "Sid": "LockToOneRegion",
+      "Effect": "Deny",
+      "NotAction": [
+        "iam:Get*",
+        "iam:List*",
+        "sts:GetCallerIdentity",
+        "sts:AssumeRoleWithWebIdentity"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringNotEquals": {
+          "aws:RequestedRegion": "us-east-1"
+        }
+      }
+    },
+    {
+      "Sid": "PullSourceFromCodeCommit",
+      "Effect": "Allow",
+      "Action": [
+        "codecommit:GitPull",
+        "codecommit:GetBranch",
+        "codecommit:GetCommit",
+        "codecommit:GetRepository",
+        "codecommit:ListBranches"
+      ],
+      "Resource": "arn:aws:codecommit:us-east-1:123456789012:c6-week11-app"
+    },
+    {
+      "Sid": "AuthenticateToECR",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:GetAuthorizationToken"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "PushImagesToOneRepository",
+      "Effect": "Allow",
+      "Action": [
+        "ecr:BatchCheckLayerAvailability",
+        "ecr:BatchGetImage",
+        "ecr:CompleteLayerUpload",
+        "ecr:DescribeImages",
+        "ecr:DescribeRepositories",
+        "ecr:InitiateLayerUpload",
+        "ecr:ListImages",
+        "ecr:PutImage",
+        "ecr:UploadLayerPart"
+      ],
+      "Resource": "arn:aws:ecr:us-east-1:123456789012:repository/c6-week11-app"
+    },
+    {
+      "Sid": "WriteBuildLogsToOneLogGroup",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogStream",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-east-1:123456789012:log-group:/aws/codebuild/c6-week11-app",
+        "arn:aws:logs:us-east-1:123456789012:log-group:/aws/codebuild/c6-week11-app:*"
+      ]
+    },
+    {
+      "Sid": "ReadDeployConfigFromOneSSMPrefix",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParametersByPath"
+      ],
+      "Resource": "arn:aws:ssm:us-east-1:123456789012:parameter/c6-week11/app/*"
+    },
+    {
+      "Sid": "DecryptOnlyTheAppKMSKey",
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "aws:ResourceTag/Project": "c6-week11-app"
+        },
+        "ForAnyValue:StringEquals": {
+          "kms:ViaService": [
+            "ssm.us-east-1.amazonaws.com",
+            "ecr.us-east-1.amazonaws.com"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ExplicitDenyOnSensitiveActions",
+      "Effect": "Deny",
+      "Action": [
+        "iam:CreateUser",
+        "iam:CreateAccessKey",
+        "iam:CreateLoginProfile",
+        "iam:DeleteUser",
+        "iam:UpdateAssumeRolePolicy",
+        "iam:AttachRolePolicy",
+        "iam:DetachRolePolicy",
+        "iam:PutRolePolicy",
+        "iam:DeleteRolePolicy",
+        "organizations:*",
+        "cloudtrail:StopLogging",
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:UpdateTrail",
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:PutBucketAcl",
+        "s3:PutBucketPolicy",
+        "s3:PutBucketPublicAccessBlock",
+        "kms:ScheduleKeyDeletion",
+        "kms:DisableKey",
+        "kms:DisableKeyRotation"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
