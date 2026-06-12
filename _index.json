@@ -1,0 +1,685 @@
+{
+  "repo": "C6-CYBERSECURITY-CRUNCH",
+  "files": [
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "title": "Contributor Covenant Code of Conduct"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "title": "Contributing to Cybersecurity Crunch"
+    },
+    {
+      "path": "README.md",
+      "title": "C6 \u00b7 Cybersecurity Crunch"
+    },
+    {
+      "path": "assets/branding/BRAND.md",
+      "title": "C6 \u00b7 Cybersecurity Crunch \u2014 Brand Guide"
+    },
+    {
+      "path": "curriculum/SYLLABUS.md",
+      "title": "C6 \u00b7 Cybersecurity Crunch \u2014 Full Syllabus"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/README.md",
+      "title": "Week 1 \u2014 The Security Mindset and the Linux Security Model"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/challenges/README.md",
+      "title": "Week 1 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/challenges/challenge-01-overthewire-bandit.md",
+      "title": "Challenge 1 \u2014 OverTheWire Bandit, levels 0-5"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/exercises/README.md",
+      "title": "Week 1 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/exercises/exercise-01-threat-model-your-laptop.md",
+      "title": "Exercise 1 \u2014 Threat-model your laptop"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/exercises/exercise-02-permissions-and-setuid.md",
+      "title": "Exercise 2 \u2014 Permissions and `setuid`"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/exercises/exercise-03-read-the-auth-log.md",
+      "title": "Exercise 3 \u2014 Read the auth log"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/homework.md",
+      "title": "Week 1 Homework"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/lecture-notes/01-the-security-mindset-and-the-cia-triad.md",
+      "title": "Lecture 1 \u2014 The Security Mindset and the CIA Triad"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/lecture-notes/02-the-linux-security-model.md",
+      "title": "Lecture 2 \u2014 The Linux Security Model"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/mini-project/README.md",
+      "title": "Mini-Project \u2014 A Threat Model of a System You Actually Use"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/quiz.md",
+      "title": "Week 1 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-01-security-mindset-and-linux-security/resources.md",
+      "title": "Week 1 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/README.md",
+      "title": "Week 2 \u2014 Networking for Security"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/challenges/README.md",
+      "title": "Week 2 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/challenges/challenge-01-decode-a-pcap.md",
+      "title": "Challenge 1 \u2014 Decode a Public Sample PCAP"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/exercises/README.md",
+      "title": "Week 2 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/exercises/exercise-01-capture-your-own-traffic.md",
+      "title": "Exercise 1 \u2014 Capture Your Own Traffic"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/exercises/exercise-02-tcpdump-puzzles.md",
+      "title": "Exercise 2 \u2014 `tcpdump` Puzzles"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/exercises/exercise-03-nftables-rules.md",
+      "title": "Exercise 3 \u2014 `nftables` Rules"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/homework.md",
+      "title": "Week 2 Homework"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/lecture-notes/01-tcp-ip-from-a-security-angle.md",
+      "title": "Lecture 1 \u2014 TCP/IP from a Security Angle"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/lecture-notes/02-reading-packets-with-tcpdump-and-wireshark.md",
+      "title": "Lecture 2 \u2014 Reading Packets with `tcpdump` and Wireshark"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/lecture-notes/03-firewalls-and-segmentation.md",
+      "title": "Lecture 3 \u2014 Firewalls and Segmentation"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/mini-project/README.md",
+      "title": "Mini-Project \u2014 An Annotated PCAP of Your Own Home Network"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/quiz.md",
+      "title": "Week 2 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-02-networking-for-security/resources.md",
+      "title": "Week 2 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/README.md",
+      "title": "Week 3 \u2014 Threat Modeling and Risk"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/challenges/README.md",
+      "title": "Week 3 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/challenges/challenge-01-threat-model-real-oss-project.md",
+      "title": "Challenge 1 \u2014 Threat-model a Real Open-source Project"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/exercises/README.md",
+      "title": "Week 3 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/exercises/exercise-01-stride-on-todo-app.md",
+      "title": "Exercise 1 \u2014 STRIDE on a Todo-list Web App"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/exercises/exercise-02-attack-tree-for-ssh.md",
+      "title": "Exercise 2 \u2014 Attack Tree for \"Compromise an SSH-accessible Linux Server\""
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/exercises/exercise-03-risk-register.md",
+      "title": "Exercise 3 \u2014 Build a Risk Register"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/homework.md",
+      "title": "Week 3 Homework"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/lecture-notes/01-stride-and-attack-trees.md",
+      "title": "Lecture 1 \u2014 STRIDE and Attack Trees"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/lecture-notes/02-asset-vs-attacker-driven-models.md",
+      "title": "Lecture 2 \u2014 Asset-Driven vs. Attacker-Driven Models"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/lecture-notes/03-risk-likelihood-times-impact-and-its-limits.md",
+      "title": "Lecture 3 \u2014 `Risk = Likelihood \u00d7 Impact` and its Limits"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/mini-project/README.md",
+      "title": "Mini-Project \u2014 A Full Threat Model of a Real System You Use"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/quiz.md",
+      "title": "Week 3 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-03-threat-modeling-and-risk/resources.md",
+      "title": "Week 3 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/README.md",
+      "title": "Week 4 \u2014 OWASP Top 10 in Python"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/challenges/README.md",
+      "title": "Week 4 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/challenges/challenge-01-audit-flask-app.md",
+      "title": "Challenge 1 \u2014 Audit a Flask App for the OWASP Top 10"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/exercises/README.md",
+      "title": "Week 4 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/exercises/exercise-01-injection-and-access-control.md",
+      "title": "Exercise 1 \u2014 Injection and Broken Access Control"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/exercises/exercise-02-crypto-and-auth.md",
+      "title": "Exercise 2 \u2014 Cryptographic Failures and Authentication Failures"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/exercises/exercise-03-ssrf-and-deserialisation.md",
+      "title": "Exercise 3 \u2014 SSRF and Deserialisation"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/homework.md",
+      "title": "Week 4 Homework"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/lecture-notes/01-injection-broken-access-broken-auth.md",
+      "title": "Lecture 1 \u2014 Injection, Broken Access Control, and Authentication Failures"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/lecture-notes/02-crypto-failures-and-misconfig.md",
+      "title": "Lecture 2 \u2014 Cryptographic Failures, Misconfiguration, and Insecure Design"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/lecture-notes/03-the-rest-vulnerable-components-logging-ssrf.md",
+      "title": "Lecture 3 \u2014 The Rest: Vulnerable Components, Logging, SSRF, Integrity"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/mini-project/README.md",
+      "title": "Mini-Project \u2014 Patch the OWASP Top 10 in a Deliberately Vulnerable Python App"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/quiz.md",
+      "title": "Week 4 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-04-owasp-top-10-python/resources.md",
+      "title": "Week 4 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/README.md",
+      "title": "Week 5 \u2014 Secure Coding in Python"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/challenges/README.md",
+      "title": "Week 5 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/challenges/challenge-01-audit-your-c1-mini-project.md",
+      "title": "Challenge 1 \u2014 Audit Your Own C1 Mini-Project"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/exercises/README.md",
+      "title": "Week 5 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/exercises/exercise-01-pickle-rce.md",
+      "title": "Exercise 1 \u2014 Pickle RCE: Build It, Break It, Patch It"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/exercises/exercise-02-redos-attack.md",
+      "title": "Exercise 2 \u2014 ReDoS: Catastrophic Backtracking and Three Fixes"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/exercises/exercise-03-run-bandit-semgrep.md",
+      "title": "Exercise 3 \u2014 First-Run bandit, semgrep, pip-audit"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/homework.md",
+      "title": "Week 5 Homework"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/lecture-notes/01-the-deserialization-trap-pickle-yaml.md",
+      "title": "Lecture 1 \u2014 The Deserialization Trap: pickle, yaml, and Friends"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/lecture-notes/02-ssrf-redos-and-the-stdlib-footguns.md",
+      "title": "Lecture 2 \u2014 SSRF, ReDoS, and the Stdlib Footguns"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/lecture-notes/03-bandit-semgrep-pip-audit-in-CI.md",
+      "title": "Lecture 3 \u2014 bandit, semgrep, pip-audit in CI"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/mini-project/README.md",
+      "title": "Mini-Project \u2014 Audit a Real Python Codebase with bandit + semgrep + pip-audit"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/quiz.md",
+      "title": "Week 5 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-05-secure-coding-python/resources.md",
+      "title": "Week 5 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/README.md",
+      "title": "Week 6 \u2014 Code Review for Security"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/challenges/README.md",
+      "title": "Week 6 \u2014 Challenges"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/challenges/challenge-01-audit-an-OSS-PR.md",
+      "title": "Challenge 1 \u2014 Audit an OSS PR"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/exercises/README.md",
+      "title": "Week 6 \u2014 Exercises"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/exercises/exercise-01-review-a-real-pr.md",
+      "title": "Exercise 1 \u2014 Review a Real Public PR"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/exercises/exercise-02-spot-the-pattern.md",
+      "title": "Exercise 2 \u2014 Spot the Pattern"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/exercises/exercise-03-checklist-vs-model.md",
+      "title": "Exercise 3 \u2014 Checklist vs. Model"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/homework.md",
+      "title": "Week 6 Homework"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/lecture-notes/01-reviewing-prs-with-a-security-lens.md",
+      "title": "Lecture 1 \u2014 Reviewing PRs with a Security Lens"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/lecture-notes/02-pattern-matching-for-vulnerability-classes.md",
+      "title": "Lecture 2 \u2014 Pattern Matching for Vulnerability Classes"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/lecture-notes/03-model-based-vs-checklist-based-review.md",
+      "title": "Lecture 3 \u2014 Model-Based vs. Checklist-Based Review"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/mini-project/README.md",
+      "title": "Mini-Project \u2014 Full Security Code Review on a Real OSS PR"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/quiz.md",
+      "title": "Week 6 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-06-code-review-for-security/resources.md",
+      "title": "Week 6 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/README.md",
+      "title": "Week 7 \u2014 Authorized Recon and Scanning"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/challenges/challenge-01-write-a-recon-runbook.md",
+      "title": "Challenge 1 \u2014 Write a Recon Runbook"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/exercises/SOLUTIONS.md",
+      "title": "Week 7 \u2014 Exercise Solutions"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/exercises/exercise-01-scan-your-own-host.md",
+      "title": "Exercise 1 \u2014 Scan Your Own Host"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/exercises/exercise-02-nse-scripts-on-vulnerable-vm.md",
+      "title": "Exercise 2 \u2014 NSE Scripts on a Vulnerable VM You Own"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/homework.md",
+      "title": "Week 7 Homework"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/lecture-notes/01-rules-of-engagement-and-scope.md",
+      "title": "Lecture 1 \u2014 Rules of Engagement and Scope"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/lecture-notes/02-host-discovery-and-port-scanning.md",
+      "title": "Lecture 2 \u2014 Host Discovery and Port Scanning"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/lecture-notes/03-service-detection-and-fingerprinting.md",
+      "title": "Lecture 3 \u2014 Service Detection, NSE, and OS Fingerprinting"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/mini-project/README.md",
+      "title": "Mini-Project \u2014 Full Authorised Recon Report on a Host You Own"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/quiz.md",
+      "title": "Week 7 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-07-authorized-recon-and-scanning/resources.md",
+      "title": "Week 7 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/README.md",
+      "title": "Week 8 \u2014 Web Application Security, Hands-On"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/challenges/challenge-01-csp-design.md",
+      "title": "Challenge 1 \u2014 Design a Content Security Policy From Scratch"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/challenges/challenge-02-zap-vs-burp-finding-comparison.md",
+      "title": "Challenge 2 \u2014 ZAP vs Burp Community: A Comparative Finding Report"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/exercises/SOLUTIONS.md",
+      "title": "Exercises \u2014 Solutions"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/exercises/exercise-01-stand-up-the-lab.md",
+      "title": "Exercise 1 \u2014 Stand Up the Lab and Configure the Proxy"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/exercises/exercise-02-exploit-the-top10-classes.md",
+      "title": "Exercise 2 \u2014 Exploit Each Top-10 Class Against vuln_lab"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/homework.md",
+      "title": "Week 8 Homework"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/lecture-notes/01-intercepting-proxy-and-the-lab.md",
+      "title": "Lecture 1 \u2014 The Intercepting Proxy and the Lab"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/lecture-notes/02-exploit-walkthrough.md",
+      "title": "Lecture 2 \u2014 Exploit Walkthrough"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/lecture-notes/03-defence-csp-patches-and-regression.md",
+      "title": "Lecture 3 \u2014 Defence, CSP, Patches, and Regression"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/mini-project/README.md",
+      "title": "Mini-Project \u2014 Build, Exploit, and Ship the Patched vuln_lab"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/mini-project/starter/README.md",
+      "title": "vuln_lab - starter"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/quiz.md",
+      "title": "Week 8 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-08-web-application-security-hands-on/resources.md",
+      "title": "Week 8 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/README.md",
+      "title": "Week 9 \u2014 Incident Response and Log Forensics"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/challenges/challenge-01-attck-mapping.md",
+      "title": "Challenge 1 \u2014 MITRE ATT&CK Mapping from Evidence Pointers"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/challenges/challenge-02-acquisition-runbook.md",
+      "title": "Challenge 2 \u2014 Write a Memory-Acquisition Runbook for Your Own Laptop"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/exercises/SOLUTIONS.md",
+      "title": "Week 9 \u2014 Exercise Solutions"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/exercises/exercise-01-first-30-minutes.md",
+      "title": "Exercise 1 \u2014 Walk the First-Thirty-Minutes Checklist"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/homework.md",
+      "title": "Week 9 \u2014 Homework"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/lecture-notes/01-ir-lifecycle-and-first-30-minutes.md",
+      "title": "Lecture 1 \u2014 The Incident Response Lifecycle and the First Thirty Minutes"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/lecture-notes/02-linux-log-forensics.md",
+      "title": "Lecture 2 \u2014 Linux Log Forensics"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/lecture-notes/03-memory-acquisition-and-chain-of-custody.md",
+      "title": "Lecture 3 \u2014 Memory Acquisition, Chain of Custody, and the Post-Incident Report"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/mini-project/README.md",
+      "title": "Mini-Project \u2014 IR Drill on the Simulated Compromise of `web-prod-02`"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/mini-project/starter/README.md",
+      "title": "Starter \u2014 IR primary handoff brief"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/mini-project/starter/attck-map-template.md",
+      "title": "MITRE ATT&CK Mapping Template \u2014 IR-2026-014"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/mini-project/starter/custody-log-template.md",
+      "title": "Chain-of-custody log \u2014 IR-2026-014"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/mini-project/starter/post-incident-template.md",
+      "title": "Post-Incident Write-Up Template \u2014 IR-2026-014 \u2014 Suspected Compromise of web-prod-02"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/quiz.md",
+      "title": "Week 9 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-09-incident-response-and-log-forensics/resources.md",
+      "title": "Week 9 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/README.md",
+      "title": "Week 10 \u2014 Network Defence: Firewalls, IDS, and VPN"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/challenges/challenge-01-egress-breakout.md",
+      "title": "Challenge 1 \u2014 Egress Breakout"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/challenges/challenge-02-segmentation-blueprint.md",
+      "title": "Challenge 2 \u2014 Segmentation Blueprint for a Small Office"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/exercises/SOLUTIONS.md",
+      "title": "Week 10 \u2014 Exercise Solutions"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/homework.md",
+      "title": "Week 10 \u2014 Homework"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/lecture-notes/01-stateful-firewalls-and-nftables.md",
+      "title": "Lecture 1 \u2014 Stateful Firewalls and nftables"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/lecture-notes/02-suricata-ids-and-et-open.md",
+      "title": "Lecture 2 \u2014 Suricata IDS and the Emerging Threats Open Ruleset"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/lecture-notes/03-wireguard-and-network-segmentation.md",
+      "title": "Lecture 3 \u2014 WireGuard and Network Segmentation"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/mini-project/README.md",
+      "title": "Mini-Project \u2014 Home / Office Network Defence Plan"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/mini-project/starter/README.md",
+      "title": "Mini-Project Starter Files"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/mini-project/starter/allowed-flows-template.md",
+      "title": "Allowed-Flow Matrix \u2014 TEMPLATE"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/mini-project/starter/runbook-template.md",
+      "title": "Runbook \u2014 TEMPLATE"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/mini-project/starter/topology-template.md",
+      "title": "Topology and Addressing Plan \u2014 TEMPLATE"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/quiz.md",
+      "title": "Week 10 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-10-network-defense-firewalls-ids-vpn/resources.md",
+      "title": "Week 10 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/README.md",
+      "title": "Week 11 \u2014 Cloud Security: IAM and Misconfiguration"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/challenges/challenge-01-rotate-the-keys.md",
+      "title": "Challenge 1 \u2014 Rotate the Keys"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/challenges/challenge-02-cross-account-role-trust.md",
+      "title": "Challenge 2 \u2014 Cross-Account Role Trust"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/exercises/SOLUTIONS.md",
+      "title": "Week 11 \u2014 Exercise Solutions"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/homework.md",
+      "title": "Week 11 \u2014 Homework"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/lecture-notes/01-iam-fundamentals-and-aws-policy-language.md",
+      "title": "Lecture 1 \u2014 IAM Fundamentals and the AWS Policy Language"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/lecture-notes/02-identity-resource-abac-and-scps.md",
+      "title": "Lecture 2 \u2014 Identity-, Resource-, Attribute-Based Policies and Service Control Policies"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/lecture-notes/03-misconfig-scanning-prowler-checkov-scoutsuite.md",
+      "title": "Lecture 3 \u2014 Misconfiguration Scanning with Prowler, Checkov, and ScoutSuite"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/mini-project/README.md",
+      "title": "Week 11 \u2014 Mini-Project: Scan, Triage, Remediate"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/mini-project/starter/README.md",
+      "title": "Mini-Project Starter \u2014 Inventory"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/mini-project/starter/design-doc-template.md",
+      "title": "IAM Design Document Template"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/mini-project/starter/remediation-template.md",
+      "title": "Remediation Log Template"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/mini-project/starter/scan-log-template.md",
+      "title": "Scan Log Template"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/quiz.md",
+      "title": "Week 11 \u2014 Quiz"
+    },
+    {
+      "path": "curriculum/week-11-cloud-security-iam-and-misconfig/resources.md",
+      "title": "Week 11 \u2014 Resources"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/README.md",
+      "title": "Week 12 \u2014 Capstone: Vulnerability Discovery and Coordinated Disclosure"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/challenges/challenge-01-the-silent-maintainer.md",
+      "title": "Challenge 1 \u2014 The Silent Maintainer"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/exercises/SOLUTIONS.md",
+      "title": "Week 12 \u2014 Exercise Solutions"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/lecture-notes/01-project-selection-and-threat-modelling.md",
+      "title": "Lecture 1 \u2014 Project Selection and Threat Modelling"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/lecture-notes/02-the-discovery-workflow-scan-confirm-triage.md",
+      "title": "Lecture 2 \u2014 The Discovery Workflow: Scan, Confirm, Triage"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/lecture-notes/03-coordinated-disclosure-cve-ghsa-and-certcc.md",
+      "title": "Lecture 3 \u2014 Coordinated Disclosure: CVE, GHSA, and CERT/CC"
+    },
+    {
+      "path": "curriculum/week-12-capstone-vulnerability-discovery-and-disclosure/resources.md",
+      "title": "Week 12 \u2014 Resources"
+    },
+    {
+      "path": "past-sessions/C6-SPRING2025/C6-README-SPRING2025.md",
+      "title": "Course Content - Spring 2025"
+    },
+    {
+      "path": "past-sessions/C6-SPRING2025/C6-RESOURCES/Cryptography-Demo/Commands.md",
+      "title": "Cybersecurity Hashing & Encryption Demos"
+    },
+    {
+      "path": "past-sessions/C6-SPRING2025/C6-RESOURCES/Linux-Fundamentals-Activity/Week2Activity.md",
+      "title": "How to Use VS Code with the Replit File"
+    }
+  ]
+}
