@@ -7,7 +7,7 @@
 ## Topics: Introduction To Cybersecurity
 - **Week Dates:** January 6, 2025 - January 10, 2025
 - **Unit:** Week 0 - Overview of C6 and TryHackme
-- **Link to Slides:** [Week 0 - C6 _ Cyber Crunch.pptx](https://github.com/CODE-CRUNCH-CLUB/C6-CYBERSECURITY-CRUNCH/blob/main/C6-SPRING2025/C6-RESOURCES/Week%200%20-%20C6%20_%20Cyber%20Crunch.pptx.pdf)
+- **Link to Slides:** [Week 0 - C6 _ Cyber Crunch.pptx](https://github.com/CODECRUNCHWORLDWIDE/C6-CYBERSECURITY-CRUNCH/blob/main/C6-SPRING2025/C6-RESOURCES/Week%200%20-%20C6%20_%20Cyber%20Crunch.pptx.pdf)
 
 ### **Commands: Terminal**
 ```bash
@@ -36,7 +36,7 @@ pwd
 - **Units:** 
     - Unit 1 - Introduction to Cybersecurity
 - **Link to content:**
-    - [Introduction to Cybersecurity](https://github.com/CODE-CRUNCH-CLUB/C6-CYBERSECURITY-CRUNCH/blob/main/C6-SPRING2025/C6-RESOURCES/Week%201%20-%20C6%20_%20Cyber%20Crunch.pptx.pdf)
+    - [Introduction to Cybersecurity](https://github.com/CODECRUNCHWORLDWIDE/C6-CYBERSECURITY-CRUNCH/blob/main/C6-SPRING2025/C6-RESOURCES/Week%201%20-%20C6%20_%20Cyber%20Crunch.pptx.pdf)
 
 ### **Sample block of code: Commands: Terminal**
 ```bash

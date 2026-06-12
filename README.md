@@ -4,7 +4,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![Built in the open](https://img.shields.io/badge/built-in%20the%20open-EF4444.svg)](https://github.com/CODE-CRUNCH-CLUB)
+[![Built in the open](https://img.shields.io/badge/built-in%20the%20open-EF4444.svg)](https://github.com/CODECRUNCHWORLDWIDE)
 
 C6 teaches **how systems fail, and how to defend them.** Defensive work is the bulk of the curriculum. Offensive techniques are practiced *only* on machines you own, on legal training platforms (picoCTF, OverTheWire, HackTheBox starter rooms, TryHackMe, VulnHub), or with explicit written permission.
 
